@@ -1,0 +1,43 @@
+.headerbox {
+  text-align: -webkit-center;
+}
+.boxLink {
+  width: max-content;
+  padding: 5px 20px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.headerLink {
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+
+  color: #ecf2ff;
+  font-size: 20px;
+  text-decoration: none;
+}
+.headerLink:first-child {
+  margin-right: 15px;
+}
+
+.hederButtonLogout {
+  background: #0072ffc7;
+  color: rgba(255, 255, 255, 0.6);
+  border: none;
+  padding: 5px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.hederButtonLogout:hover,
+.hederButtonLogout:focus {
+  color: white;
+  background-color: #4356dc;
+}
+
+.nameUser {
+  color: #ecf2ff;
+}
+
+.activeLink {
+  color: #4356dc;
+}
