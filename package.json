@@ -2,7 +2,7 @@
   "name": "main-dz",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Bohdan-morenec.github.io/goit-react-hw-08-phonebook",
+  "homepage": "https://Bohdan-morenec.github.io/goit-react-hw-09-phonebook",
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.0",
     "@testing-library/jest-dom": "^5.14.1",
