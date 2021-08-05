@@ -1,18 +1,18 @@
 import "./App.css";
 
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { logger } from "./redux/contacts/contact-selectors";
 import { loggerAuthorization } from "./redux/authorization/authorization-selectors";
 import { currentUser } from "./redux/authorization/autorization-operations";
 import { Preloader } from "./options/Preloader/Preloader";
 
 import { Switch, Redirect } from "react-router-dom";
-import { Component, Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 
 import PrivateRoute from "./Route/privateRoute/privateRoute";
 import PublicRoute from "./Route/publicRoute/publicRoute";
 
-import UserLogged from "./component/header/header";
+import Header from "./component/Header/Header";
 
 const PhoneBook = lazy(() =>
   import("./Route/PhoneBook" /* webpackChunkName: "PhoneBook" */)
@@ -26,48 +26,42 @@ const Login = lazy(() =>
   import("./Route/SingIn/SingIn" /* webpackChunkName: "Login" */)
 );
 
-class App extends Component {
-  componentDidMount = () => {
-    this.props.currentUser();
-  };
+const App = () => {
+  const dispatch = useDispatch();
 
-  render() {
-    return (
-      <div>
-        <UserLogged />
-        <Suspense fallback={<Preloader />}>
-          <Switch>
-            <PublicRoute
-              path="/register"
-              restricted
-              redirect="/"
-              component={Register}
-            />
-            <PublicRoute
-              path="/Login"
-              restricted
-              redirect="/"
-              component={Login}
-            />
-            <PrivateRoute path="/" redirect="/Login" component={PhoneBook} />
-            <Redirect to="/login" />
-          </Switch>
-        </Suspense>
+  const loggerContacts = useSelector(logger);
+  const loggeAtAuthorization = useSelector(loggerAuthorization);
 
-        {this.props.logger && <Preloader />}
-        {this.props.loggerAuthorization && <Preloader />}
-      </div>
-    );
-  }
-}
+  useEffect(() => {
+    const getCurrentUser = () => dispatch(currentUser());
+    getCurrentUser();
+  }, [dispatch]);
 
-const mapStateToProps = (state) => ({
-  logger: logger(state),
-  loggerAuthorization: loggerAuthorization(state),
-});
+  return (
+    <div>
+      <Header />
+      <Suspense fallback={<Preloader />}>
+        <Switch>
+          <PublicRoute path="/register" restricted redirect="/">
+            <Register />
+          </PublicRoute>
 
-const mapDispatchToProps = {
-  currentUser: currentUser,
+          <PublicRoute path="/Login" restricted redirect="/">
+            <Login />
+          </PublicRoute>
+
+          <PrivateRoute path="/" redirect="/Login">
+            <PhoneBook />
+          </PrivateRoute>
+
+          <Redirect to="/login" />
+        </Switch>
+      </Suspense>
+
+      {loggerContacts && <Preloader />}
+      {loggeAtAuthorization && <Preloader />}
+    </div>
+  );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

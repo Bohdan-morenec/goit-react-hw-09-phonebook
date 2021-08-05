@@ -1,49 +1,46 @@
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import style from "./ContactList.module.scss";
+// import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import * as actions from "../../redux/contacts/contact-operations";
-import { Component } from "react";
 import { filteredArrayContact } from "../../redux/contacts/contact-selectors";
 
-class ContactList extends Component {
-  componentDidMount = () => {
-    this.props.fetchContact();
-  };
+import style from "./ContactList.module.scss";
 
-  render() {
-    return (
-      <ul className={style.list}>
-        {this.props.filteredArrayContact.map(({ name, number, id }) => (
-          <li className={style.listItem} key={id}>
-            <p className={style.name}>
-              {name}: <span className={style.number}>{number}</span>
-            </p>
-            <button
-              className={style.button}
-              type="button"
-              onClick={() => this.props.deleteContact(id)}
-            >
-              Удалить
-            </button>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-}
+const ContactList = () => {
+  const dispatch = useDispatch();
+  const filteredContact = useSelector(filteredArrayContact);
 
-ContactList.propTypes = {
-  deleteContact: PropTypes.func.isRequired,
-  filteredArrayContact: PropTypes.array.isRequired,
+  const deleteContact = (id) => dispatch(actions.deleteContact(id));
+
+  useEffect(() => {
+    const fetchContact = () => dispatch(actions.fetchContact());
+
+    fetchContact();
+  }, [dispatch]);
+
+  return (
+    <ul className={style.list}>
+      {filteredContact.map(({ name, number, id }) => (
+        <li className={style.listItem} key={id}>
+          <p className={style.name}>
+            {name}: <span className={style.number}>{number}</span>
+          </p>
+          <button
+            className={style.button}
+            type="button"
+            onClick={() => deleteContact(id)}
+          >
+            Удалить
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  filteredArrayContact: filteredArrayContact(state),
-});
+// ContactList.propTypes = {
+//   deleteContact: PropTypes.func.isRequired,
+//   filteredArrayContact: PropTypes.array.isRequired,
+// };
 
-const mapDispatchToProps = (dispatch) => ({
-  deleteContact: (id) => dispatch(actions.deleteContact(id)),
-  fetchContact: () => dispatch(actions.fetchContact()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
+export default ContactList;

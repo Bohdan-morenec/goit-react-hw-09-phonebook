@@ -1,11 +1,13 @@
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
+import { getUserInformation } from "../../redux/authorization/authorization-selectors";
 
 import UserLogged from "./userIsLogged";
 import UserNotLogged from "./UserNotLogged";
-import { getUserInformation } from "../../redux/authorization/authorization-selectors";
+
 import styles from "./header.module.scss";
 
-const header = ({ UserAction }) => {
+const Header = () => {
+  const UserAction = useSelector(getUserInformation);
   return (
     <div className={styles.headerbox}>
       <div className={styles.boxLink}>
@@ -15,8 +17,4 @@ const header = ({ UserAction }) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  UserAction: getUserInformation(state),
-});
-
-export default connect(mapStateToProps)(header);
+export default Header;

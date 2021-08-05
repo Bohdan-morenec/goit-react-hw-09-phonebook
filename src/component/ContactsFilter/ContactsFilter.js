@@ -1,10 +1,18 @@
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import styles from "./ContactsFilter.module.scss";
+// import PropTypes from "prop-types";
+import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../../redux/contacts/contacts-actions";
 import { getFilter } from "../../redux/contacts/contact-selectors";
 
-const ContactsFilter = ({ filterContactState, filter }) => {
+import styles from "./ContactsFilter.module.scss";
+
+const ContactsFilter = () => {
+  const dispatch = useDispatch();
+
+  const filter = useSelector(getFilter);
+
+  const filterContactState = (e) =>
+    dispatch(actions.filterContact(e.currentTarget.value));
+
   return (
     <input
       className={styles.lable}
@@ -17,18 +25,9 @@ const ContactsFilter = ({ filterContactState, filter }) => {
   );
 };
 
-ContactsFilter.propTypes = {
-  filterContactState: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
-};
+// ContactsFilter.propTypes = {
+//   filterContactState: PropTypes.func.isRequired,
+//   filter: PropTypes.string.isRequired,
+// };
 
-const mapStateToProps = (state) => ({
-  filter: getFilter(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  filterContactState: (e) =>
-    dispatch(actions.filterContact(e.currentTarget.value)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactsFilter);
+export default ContactsFilter;
